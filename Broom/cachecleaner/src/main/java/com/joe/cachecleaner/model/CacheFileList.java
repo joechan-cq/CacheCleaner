@@ -9,6 +9,7 @@ import java.util.List;
 public class CacheFileList {
 
     /**
+     * appName : Wechat
      * packageName : com.joe.test
      * fileDirs : [{"dir":"MyLog"},{"dir":"MyCache"}]
      */
@@ -24,12 +25,22 @@ public class CacheFileList {
     }
 
     public static class DatasEntity {
+        private String appName;
+
         private String packageName;
         /**
          * dir : MyLog      相对于存储根目录的相对地址
          */
 
         private List<FileDirsEntity> fileDirs;
+
+        public String getAppName() {
+            return appName;
+        }
+
+        public void setAppName(String appName) {
+            this.appName = appName;
+        }
 
         public void setPackageName(String packageName) {
             this.packageName = packageName;

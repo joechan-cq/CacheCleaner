@@ -172,6 +172,9 @@ public class AppCleanEngine {
         HashMap<String, Long> results = new HashMap<>();
         CacheFileList fileList = DecodeUtil.decodeListsJson(mContext);
 
+        if (fileList == null) {
+            return null;
+        }
         String rootPath = getRootPath();
 
         for (CacheFileList.DatasEntity entity : fileList.getDatas()) {
@@ -192,6 +195,10 @@ public class AppCleanEngine {
     public void deleteCacheFilesFromJsonFile(Context context, List<String> packageNames) {
         mContext = context;
         CacheFileList fileList = DecodeUtil.decodeListsJson(mContext);
+        if (fileList == null) {
+            return;
+        }
+
         String rootPath = getRootPath();
         for (CacheFileList.DatasEntity entity : fileList.getDatas()) {
             String packageName = entity.getPackageName();
