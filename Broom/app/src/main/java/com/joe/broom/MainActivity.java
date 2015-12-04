@@ -3,7 +3,6 @@ package com.joe.broom;
 import android.content.pm.IPackageDataObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,13 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         engine.setDataObserver(new IPackageDataObserver.Stub() {
             @Override
             public void onRemoveCompleted(String packageName, boolean succeeded) throws RemoteException {
-                new Handler(getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ScanAsyncTask task = new ScanAsyncTask();
-                        task.execute();
-                    }
-                });
+                Log.i("Z-MainActivity", "onRemoveCompleted: ---------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<");
+                ScanAsyncTask task = new ScanAsyncTask();
+                task.execute();
             }
         });
     }
