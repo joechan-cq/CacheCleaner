@@ -1,7 +1,10 @@
 package com.joe.broom;
 
+import android.content.pm.IPackageDataObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private RecyclerView recyclerView;
     private AppCacheAdapter adapter;
-
+    private AppCleanEngine engine;
     private ArrayList<AppInfo> results;
 
     @Override
@@ -29,6 +32,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_clean).setOnClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        engine = new AppCleanEngine();
+        engine.setDataObserver(new IPackageDataObserver.Stub() {
+            @Override
+            public void onRemoveCompleted(String packageName, boolean succeeded) throws RemoteException {
+                new Handler(getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ScanAsyncTask task = new ScanAsyncTask();
+                        task.execute();
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -39,13 +55,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 task.execute();
                 break;
             case R.id.btn_clean:
+                engine.cleanAllCache();
                 break;
         }
     }
 
     class ScanAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        AppCleanEngine engine = new AppCleanEngine();
 
         @Override
         protected Void doInBackground(Void... params) {

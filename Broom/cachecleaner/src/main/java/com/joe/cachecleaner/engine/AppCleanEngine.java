@@ -126,6 +126,10 @@ public class AppCleanEngine {
         }
     };
 
+    public void setDataObserver(IPackageDataObserver.Stub dataObserver) {
+        this.mDataObserver = dataObserver;
+    }
+
     /**
      * 一键加速,无法指定应用
      */
