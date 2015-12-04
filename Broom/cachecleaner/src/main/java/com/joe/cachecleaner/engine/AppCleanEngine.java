@@ -6,9 +6,7 @@ import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
-import android.os.Environment;
-import android.os.RemoteException;
-import android.os.StatFs;
+import android.os.*;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -74,8 +72,8 @@ public class AppCleanEngine {
             }
             String strGetPackageSizeInfo = "getPackageSizeInfo";
             try {
-                Method getPackageSizeInfo = packageManager.getClass().getDeclaredMethod(strGetPackageSizeInfo, String.class, IPackageStatsObserver.class);
-                getPackageSizeInfo.invoke(packageManager, packageName, mStatsObserver);
+                Method getPackageSizeInfo = packageManager.getClass().getDeclaredMethod(strGetPackageSizeInfo, String.class, int.class, IPackageStatsObserver.class);
+                getPackageSizeInfo.invoke(packageManager, packageName, android.os.Process.myUid() / 100000, mStatsObserver);
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

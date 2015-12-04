@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.joe.cachecleaner.engine.AppCleanEngine;
@@ -51,7 +52,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected Void doInBackground(Void... params) {
             results = engine.scanAppCache(MainActivity.this);
-            adapter.notifyDataSetChanged();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("Demo", "adapter notifydatachanged:" + results.toString());
+                    adapter.notifyDataSetChanged();
+                }
+            });
             return null;
         }
     }
