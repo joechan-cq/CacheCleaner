@@ -1,0 +1,25 @@
+{
+  "datas": [
+    {
+      "appName": "JoeTest",
+      "packageName": "com.joe.test",
+      "fileDirs": [
+        {
+          "dir": "MyLog"
+        },
+        {
+          "dir": "MyCache"
+        }
+      ]
+    },
+    {
+      "appName": "System",
+      "packageName": "com.system",
+      "fileDirs": [
+        {
+          "dir": "Download"
+        }
+      ]
+    }
+  ]
+}
