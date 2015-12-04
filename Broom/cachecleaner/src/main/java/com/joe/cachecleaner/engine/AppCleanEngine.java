@@ -108,7 +108,18 @@ public class AppCleanEngine {
             String strDeleteApplicationCacheFiles = "deleteApplicationCacheFiles";
             try {
                 Method deleteApplicationCacheFiles = packageManager.getClass().getDeclaredMethod(strDeleteApplicationCacheFiles, String.class, IPackageDataObserver.class);
-                deleteApplicationCacheFiles.invoke(packageManager, mDataObserver);
+                Log.i("Z-AppCleanEngine", "cleanAppCache: packageName:" + packageName);
+                deleteApplicationCacheFiles.invoke(packageManager, packageName, new IPackageDataObserver() {
+                    @Override
+                    public IBinder asBinder() {
+                        return null;
+                    }
+
+                    @Override
+                    public void onRemoveCompleted(String packageName, boolean succeeded) throws RemoteException {
+
+                    }
+                });
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

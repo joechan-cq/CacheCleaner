@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private AppCacheAdapter adapter;
     private AppCleanEngine engine;
     private ArrayList<AppInfo> results;
+    //private List<String> packageCleanList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 task.execute();
             }
         });
+        //packageCleanList = new ArrayList<>();
     }
 
     @Override
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_clean:
                 engine.cleanAllCache();
+                //engine.cleanAppCache(packageCleanList); 权限级别不够 DELETE_CACHE_FILES
                 break;
         }
     }
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void run() {
                     Log.d("Demo", "adapter notifydatachanged:" + results.toString());
                     adapter = new AppCacheAdapter(MainActivity.this, results);
+                    //packageCleanList.add(results.get(10).getPackageName());
                     recyclerView.setAdapter(adapter);
                 }
             });
