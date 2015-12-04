@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btn_clean).setOnClickListener(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AppCacheAdapter(this, results);
-        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -56,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void run() {
                     Log.d("Demo", "adapter notifydatachanged:" + results.toString());
-                    adapter.notifyDataSetChanged();
+                    adapter = new AppCacheAdapter(MainActivity.this, results);
+                    recyclerView.setAdapter(adapter);
                 }
             });
             return null;
