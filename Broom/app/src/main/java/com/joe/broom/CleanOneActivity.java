@@ -1,5 +1,6 @@
 package com.joe.broom;
 
+import android.app.ProgressDialog;
 import android.content.pm.IPackageDataObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,10 +21,15 @@ public class CleanOneActivity extends AppCompatActivity implements View.OnClickL
     private AppCacheAdapter adapter;
     private AppCleanEngine engine;
     private ArrayList<AppInfo> results;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dialog = new ProgressDialog(this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("正在扫描缓存");
+        
         setContentView(R.layout.activity_main);
         results = new ArrayList<>();
         findViewById(R.id.btn_scan).setOnClickListener(this);
@@ -44,6 +50,7 @@ public class CleanOneActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_scan:
+                dialog.show();
                 ScanAsyncTask task = new ScanAsyncTask();
                 task.execute();
                 break;
@@ -63,6 +70,7 @@ public class CleanOneActivity extends AppCompatActivity implements View.OnClickL
                 public void run() {
                     adapter = new AppCacheAdapter(CleanOneActivity.this, results);
                     recyclerView.setAdapter(adapter);
+                    dialog.dismiss();
                 }
             });
             return null;

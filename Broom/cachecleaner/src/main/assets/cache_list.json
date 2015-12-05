@@ -1,16 +1,22 @@
 {
   "datas": [
     {
-      "appName": "System",
+      "appName": "系统",
       "packageName": "com.system",
       "fileDirs": [
         {
           "dir": "Download"
+        },
+        {
+          "dir": "albumart"
+        },
+        {
+          "dir": "album"
         }
       ]
     },
     {
-      "appName": "Weibo",
+      "appName": "微博",
       "packageName": "com.sina.weibo",
       "fileDirs": [
         {
@@ -22,7 +28,7 @@
       ]
     },
     {
-      "appName": "UCExplore",
+      "appName": "UC浏览器",
       "packageName": "com.UCMobile",
       "fileDirs": [
         {
@@ -32,7 +38,7 @@
     },
     {
       "appName": "56iq",
-      "packageName": "com.ebanswers",
+      "packageName": "com.ebanswers.washer",
       "fileDirs": [
         {
           "dir": "56iq"

@@ -178,9 +178,7 @@ public class AppCleanEngine {
     }
 
     /**
-     * 扫描json文件提供的文件目录
-     *
-     * @return <packageName，Long>对应包名下罗列的文件（文件夹）的总大小
+     * 扫描json文件提供的文件目录，不会阻塞线程，但是也推荐放在异步中
      */
     public ArrayList<AppInfo> scanCacheFileByJsonFile(Context context) {
         mContext = context;
