@@ -6,7 +6,10 @@ import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
-import android.os.*;
+import android.os.Environment;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.os.StatFs;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -17,7 +20,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -100,7 +102,7 @@ public class AppCleanEngine {
     };
 
     /**
-     * 清理非系统应用缓存,需要系统权限
+     * 清理非系统应用缓存,需要系统root权限
      */
     public void cleanAppCache(List<String> list) {
         for (String info : list) {
@@ -142,7 +144,7 @@ public class AppCleanEngine {
     }
 
     /**
-     * 一键加速,无法指定应用
+     * 清空所有缓存，无法指定应用
      */
     public void cleanAllCache() {
         try {
@@ -180,30 +182,37 @@ public class AppCleanEngine {
      *
      * @return <packageName，Long>对应包名下罗列的文件（文件夹）的总大小
      */
-    public HashMap<String, Long> scanCacheFileByJsonFile(Context context) {
+    public ArrayList<AppInfo> scanCacheFileByJsonFile(Context context) {
         mContext = context;
-        HashMap<String, Long> results = new HashMap<>();
+        ArrayList<AppInfo> results = new ArrayList<>();
         CacheFileList fileList = DecodeUtil.decodeListsJson(mContext);
-
         if (fileList == null) {
             return null;
         }
         String rootPath = getRootPath();
 
         for (CacheFileList.DatasEntity entity : fileList.getDatas()) {
+            AppInfo info = new AppInfo();
             String packageName = entity.getPackageName();
+            String appName = entity.getAppName();
             long size = 0;
             for (CacheFileList.DatasEntity.FileDirsEntity fileDirsEntity : entity.getFileDirs()) {
                 String dir = rootPath + fileDirsEntity.getDir();
-                size += calculateDirSize(new File(dir));
+                Log.d("Engine", "file dir:" + dir);
+                long tmp = calculateDirSize(new File(dir));
+                size += tmp;
+                Log.d("Engine", "file size:" + tmp);
             }
-            results.put(packageName, size);
+            info.setPackageName(packageName);
+            info.setAppCacheSize(size);
+            info.setAppName(appName);
+            results.add(info);
         }
         return results;
     }
 
     /**
-     * 根据包名来删除Json文件中罗列的文件夹
+     * 根据包名来删除Json文件中罗列的文件夹,配合{@link #scanCacheFileByJsonFile(Context)}使用
      */
     public void deleteCacheFilesFromJsonFile(Context context, List<String> packageNames) {
         mContext = context;
@@ -215,9 +224,11 @@ public class AppCleanEngine {
         String rootPath = getRootPath();
         for (CacheFileList.DatasEntity entity : fileList.getDatas()) {
             String packageName = entity.getPackageName();
+            Log.d("Engine", "need to clear app packagename:" + packageName);
             if (packageNames.contains(packageName)) {
                 for (CacheFileList.DatasEntity.FileDirsEntity fileDirsEntity : entity.getFileDirs()) {
                     String dir = rootPath + fileDirsEntity.getDir();
+                    Log.d("Engine", "delete file:" + dir);
                     deleteFile(dir);
                 }
             }
@@ -257,10 +268,7 @@ public class AppCleanEngine {
     private String getRootPath() {
         String rootPath = Environment.getDataDirectory().getAbsolutePath() + File.separator;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File sd = new File(Environment.getExternalStorageDirectory().getPath());
-            if (sd.canWrite()) {
-                rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator; // 取得sdcard文件路径
-            }
+            rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator; // 取得sdcard文件路径
         }
         return rootPath;
     }
@@ -278,8 +286,10 @@ public class AppCleanEngine {
         }
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            for (File item : files) {
-                size += calculateDirSize(item);
+            if (files != null) {
+                for (File item : files) {
+                    size += calculateDirSize(item);
+                }
             }
         }
         return size;

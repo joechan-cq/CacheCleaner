@@ -1,23 +1,41 @@
 {
   "datas": [
     {
-      "appName": "JoeTest",
-      "packageName": "com.joe.test",
-      "fileDirs": [
-        {
-          "dir": "MyLog"
-        },
-        {
-          "dir": "MyCache"
-        }
-      ]
-    },
-    {
       "appName": "System",
       "packageName": "com.system",
       "fileDirs": [
         {
           "dir": "Download"
+        }
+      ]
+    },
+    {
+      "appName": "Weibo",
+      "packageName": "com.sina.weibo",
+      "fileDirs": [
+        {
+          "dir": "sina/weibo"
+        },
+        {
+          "dir": ".wbadcache"
+        }
+      ]
+    },
+    {
+      "appName": "UCExplore",
+      "packageName": "com.UCMobile",
+      "fileDirs": [
+        {
+          "dir": "UCDownloads/cache"
+        }
+      ]
+    },
+    {
+      "appName": "56iq",
+      "packageName": "com.ebanswers",
+      "fileDirs": [
+        {
+          "dir": "56iq"
         }
       ]
     }

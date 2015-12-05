@@ -7,7 +7,6 @@ import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.joe.cachecleaner.engine.AppCleanEngine;
@@ -15,13 +14,12 @@ import com.joe.cachecleaner.model.AppInfo;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class CleanOneActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
     private AppCacheAdapter adapter;
     private AppCleanEngine engine;
     private ArrayList<AppInfo> results;
-    //private List<String> packageCleanList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         engine.setDataObserver(new IPackageDataObserver.Stub() {
             @Override
             public void onRemoveCompleted(String packageName, boolean succeeded) throws RemoteException {
-                Log.i("Z-MainActivity", "onRemoveCompleted: ---------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<");
                 ScanAsyncTask task = new ScanAsyncTask();
                 task.execute();
             }
         });
-        //packageCleanList = new ArrayList<>();
     }
 
     @Override
@@ -53,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_clean:
                 engine.cleanAllCache();
-                //engine.cleanAppCache(packageCleanList); 权限级别不够 DELETE_CACHE_FILES
                 break;
         }
     }
@@ -62,13 +57,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         protected Void doInBackground(Void... params) {
-            results = engine.scanAppCache(MainActivity.this);
+            results = engine.scanAppCache(CleanOneActivity.this);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("Demo", "adapter notifydatachanged:" + results.toString());
-                    adapter = new AppCacheAdapter(MainActivity.this, results);
-                    //packageCleanList.add(results.get(10).getPackageName());
+                    adapter = new AppCacheAdapter(CleanOneActivity.this, results);
                     recyclerView.setAdapter(adapter);
                 }
             });

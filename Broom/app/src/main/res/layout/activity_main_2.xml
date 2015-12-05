@@ -11,22 +11,22 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/btn_scan"
+            android:id="@+id/btn_scan2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="扫描缓存" />
+            android:text="扫描json文件列出缓存" />
 
         <Button
-            android:id="@+id/btn_clean"
+            android:id="@+id/btn_clean2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="清理所有缓存" />
+            android:text="清理选中的缓存" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recyclerView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
